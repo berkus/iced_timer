@@ -40,7 +40,15 @@ impl InitPanel {
         .into()
     }
 
-    pub fn update(&mut self, _message: Message) -> Task<Message> {
-        Task::none()
+    pub fn update(&mut self, message: Message) -> Task<Message> {
+        match message {
+            Message::HoursChanged(message) => self.hours.update(message).map(Message::HoursChanged),
+            Message::MinutesChanged(message) => {
+                self.minutes.update(message).map(Message::MinutesChanged)
+            }
+            Message::SecondsChanged(message) => {
+                self.seconds.update(message).map(Message::SecondsChanged)
+            }
+        }
     }
 }
