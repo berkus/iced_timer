@@ -13,11 +13,11 @@ pub enum Message {
     NewValue(u8),
 }
 
-// this is not a widget but a "view" thingie
 #[derive(Default)]
 pub struct InputView {
     value: u8,
     label: &'static str,
+    clamp: Option<(u8, u8)>,
 }
 
 impl InputView {
@@ -25,22 +25,36 @@ impl InputView {
         Self {
             value: init_value.unwrap_or(0),
             label,
+            clamp: None,
         }
+    }
+
+    pub fn clamped(self, min: u8, max: u8) -> Self {
+        Self {
+            clamp: Some((min, max)),
+            ..self
+        }
+    }
+
+    fn clamp(&self, value: u8) -> u8 {
+        self.clamp
+            .map(|(min, max)| value.clamp(min, max))
+            .unwrap_or(value)
     }
 
     pub fn view(&self) -> Element<Message> {
         column![
             text(self.label),
-            button("+").on_press(Message::NewValue(self.value.saturating_add(1))),
+            button("+").on_press(Message::NewValue(self.clamp(self.value.saturating_add(1)))),
             text_input("0", &format!("{}", self.value)).on_input(|s| {
                 let v = s.parse::<u8>();
                 if v.is_ok() {
-                    Message::NewValue(v.unwrap())
+                    Message::NewValue(self.clamp(v.unwrap()))
                 } else {
                     Message::ErrorInput
                 }
             }),
-            button("-").on_press(Message::NewValue(self.value.saturating_sub(1)))
+            button("-").on_press(Message::NewValue(self.clamp(self.value.saturating_sub(1))))
         ]
         .into()
     }

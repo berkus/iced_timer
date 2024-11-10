@@ -25,9 +25,9 @@ pub struct InitPanel {
 impl InitPanel {
     pub fn new() -> Self {
         Self {
-            hours: InputView::new("Hours", None),
-            minutes: InputView::new("Minutes", Some(10)),
-            seconds: InputView::new("Seconds", None),
+            hours: InputView::new("Hours", None).clamped(0, 24),
+            minutes: InputView::new("Minutes", Some(10)).clamped(0, 60),
+            seconds: InputView::new("Seconds", None).clamped(0, 60),
         }
     }
 
