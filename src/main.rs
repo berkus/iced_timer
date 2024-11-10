@@ -14,6 +14,9 @@ mod input_view;
 mod timer_panel;
 
 pub fn main() -> iced::Result {
+    tracing_subscriber::fmt()
+        .map_event_format(|f| f.pretty())
+        .init();
     iced::run("Iced Timer", IcedTimer::update, IcedTimer::view)
 }
 
