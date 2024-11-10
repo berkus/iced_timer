@@ -5,9 +5,15 @@
 #![allow(unused_imports)]
 
 use iced::{
+    color,
     widget::{column, container, Container},
     Element, Task,
 };
+
+#[cfg(debug_assertions)]
+const DEBUG: bool = true;
+#[cfg(not(debug_assertions))]
+const DEBUG: bool = false;
 
 mod init_panel;
 mod input_view;
@@ -43,10 +49,17 @@ impl IcedTimer {
     }
 
     fn view(&self) -> Element<Message> {
-        container(column![
+        let content: Element<_> = column![
             self.init_panel.view().map(Message::InitPanel),
             self.timer_panel.view().map(Message::TimerPanel),
-        ])
+        ]
+        .into();
+
+        container(if DEBUG {
+            content.explain(color!(160, 160, 160, 0.6))
+        } else {
+            content
+        })
         .into()
     }
 }
