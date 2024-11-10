@@ -1,0 +1,8 @@
+[package]
+name = "iced_timer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+iced = { version = "0.13.1", features = ["advanced"] }
+iced_anim = { version = "0.1.4", features = ["widgets"] }
