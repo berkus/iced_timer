@@ -23,7 +23,9 @@ pub fn main() -> iced::Result {
     tracing_subscriber::fmt()
         .map_event_format(|f| f.pretty())
         .init();
-    iced::run("Iced Timer", IcedTimer::update, IcedTimer::view)
+
+    iced::application("Iced Timer", IcedTimer::update, IcedTimer::view)
+        .run_with(|| (IcedTimer::new(), Task::none()))
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -39,6 +41,13 @@ struct IcedTimer {
 }
 
 impl IcedTimer {
+    fn new() -> Self {
+        Self {
+            init_panel: init_panel::InitPanel::new(),
+            timer_panel: timer_panel::TimerPanel::default(),
+        }
+    }
+
     fn update(&mut self, message: Message) -> Task<Message> {
         match message {
             Message::InitPanel(message) => self.init_panel.update(message).map(Message::InitPanel),
