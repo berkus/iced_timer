@@ -5,10 +5,10 @@
 
 use {
     iced::{
-        widget::{row, text},
+        widget::{button, column, row, text},
         Element, Task,
     },
-    std::time::Duration,
+    jiff::{ToSpan, Unit},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -17,9 +17,11 @@ pub enum Message {
     Stop,
 }
 
+// TODO: Subscribe to a timer event if self.running, otherwise drop subscription.
+
 #[derive(Default)]
 pub struct TimerPanel {
-    remaining: Duration,
+    remaining: jiff::Span,
     running: bool,
 }
 
@@ -33,10 +35,25 @@ impl TimerPanel {
     }
 
     pub fn view(&self) -> Element<Message> {
-        row![text("hello"),].into()
+        // let mut c = Column::new();
+        // if self.remaining.total(Unit::Hour) > 0 {
+        //     c = c.push(text(format!("{:?}", self.remaining)));
+        // }
+
+        // let c = column![
+        //     Some(text("hello")),
+        //     None,
+        //     Some(button("Start").on_press(Message::Start)),
+        // ];
+
+        row![text("hello"), button("Start").on_press(Message::Start)].into()
     }
 
-    pub fn update(&mut self, _message: Message) -> Task<Message> {
+    pub fn update(&mut self, message: Message) -> Task<Message> {
+        match message {
+            Message::Start => self.start(),
+            Message::Stop => self.stop(),
+        }
         Task::none()
     }
 }
