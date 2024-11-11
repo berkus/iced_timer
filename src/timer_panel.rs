@@ -5,7 +5,7 @@
 
 use iced::{
     time::{self, Duration},
-    widget::{button, column, row, text, Column, Row},
+    widget::{button, column, horizontal_space, row, text, Column, Row},
     Element, Subscription, Task,
 };
 
@@ -44,14 +44,41 @@ impl TimerPanel {
     }
 
     pub fn view(&self) -> Element<Message> {
+        let hours = self.remaining.as_hours();
+        let minutes = self.remaining.as_mins() - self.remaining.as_hours() * 60;
+        let seconds = self.remaining.as_secs() - self.remaining.as_mins() * 60;
+
         let r = row([
-            self.remaining.as_hours(),
-            self.remaining.as_mins(),
-            self.remaining.as_secs(),
+            Some(horizontal_space().into()),
+            if hours == 0 {
+                None
+            } else {
+                Some(text(format!("{hours:>2}")).size(65).into())
+            },
+            if hours == 0 {
+                None
+            } else {
+                Some(text(":").size(65).into())
+            },
+            if minutes == 0 && hours == 0 {
+                None
+            } else {
+                if hours == 0 {
+                    Some(text(format!("{minutes:>2}")).size(65).into())
+                } else {
+                    Some(text(format!("{minutes:02}")).size(65).into())
+                }
+            },
+            if minutes == 0 && hours == 0 {
+                None
+            } else {
+                Some(text(":").size(65).into())
+            },
+            Some(text(format!("{seconds:02}")).size(65).into()),
+            Some(horizontal_space().into()),
         ]
         .into_iter()
-        .skip_while(|&value| value == 0)
-        .map(|value| text(value).into()));
+        .filter_map(|value| value));
 
         let b = if self.running {
             button("Stop").on_press(Message::Stop)
