@@ -2,7 +2,7 @@ build:
     cargo +nightly build
 
 debug:
-    env RUST_LOG=trace cargo +nightly run
+    env RUST_LOG=trace cargo +nightly run --profile unopt
 
 format:
     cargo +nightly fmt
