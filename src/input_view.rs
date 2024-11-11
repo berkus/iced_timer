@@ -36,6 +36,10 @@ impl InputView {
         }
     }
 
+    pub fn value(&self) -> u8 {
+        self.value
+    }
+
     fn clamp(&self, value: u8) -> u8 {
         self.clamp
             .map(|(min, max)| value.clamp(min, max))

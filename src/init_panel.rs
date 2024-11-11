@@ -31,6 +31,15 @@ impl InitPanel {
         }
     }
 
+    pub fn duration(&self) -> jiff::SignedDuration {
+        let hours = self.hours.value() as i64;
+        let minutes = self.minutes.value() as i64;
+        let seconds = self.seconds.value() as i64;
+        jiff::SignedDuration::from_hours(hours)
+            + jiff::SignedDuration::from_mins(minutes)
+            + jiff::SignedDuration::from_secs(seconds)
+    }
+
     pub fn view(&self) -> Element<Message> {
         row![
             self.hours.view().map(Message::HoursChanged),

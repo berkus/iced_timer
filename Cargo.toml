@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-iced = { version = "0.13.1", features = ["debug"] }
+iced = { version = "0.13.1", features = ["debug", "tokio"] }
 iced_anim = { version = "0.1.4", features = ["widgets"] }
 jiff = "0.1.14"
 tracing-subscriber = { version = "0.3.18", features = [

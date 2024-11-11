@@ -7,7 +7,7 @@
 use iced::{
     color,
     widget::{column, container, Container},
-    Element, Task,
+    Element, Subscription, Task,
 };
 
 #[cfg(debug_assertions)]
@@ -25,6 +25,7 @@ pub fn main() -> iced::Result {
         .init();
 
     iced::application("Iced Timer", IcedTimer::update, IcedTimer::view)
+        .subscription(IcedTimer::subscription)
         .run_with(|| (IcedTimer::new(), Task::none()))
 }
 
@@ -48,10 +49,22 @@ impl IcedTimer {
         }
     }
 
+    fn subscription(&self) -> Subscription<Message> {
+        self.timer_panel.subscription().map(Message::TimerPanel)
+    }
+
     fn update(&mut self, message: Message) -> Task<Message> {
         match message {
             Message::InitPanel(message) => self.init_panel.update(message).map(Message::InitPanel),
             Message::TimerPanel(message) => {
+                match message {
+                    timer_panel::Message::Start => {
+                        let _ = self
+                            .timer_panel
+                            .update(timer_panel::Message::Init(self.init_panel.duration()));
+                    }
+                    _ => {}
+                }
                 self.timer_panel.update(message).map(Message::TimerPanel)
             }
         }
