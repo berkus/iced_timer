@@ -4,9 +4,10 @@
 //        9:59
 
 use iced::{
+    alignment::Horizontal,
     time::{self, Duration},
     widget::{button, column, horizontal_space, row, text, Column, Row},
-    Element, Subscription, Task,
+    Element, Length, Subscription, Task,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -86,7 +87,7 @@ impl TimerPanel {
             button("Start").on_press(Message::Start)
         };
 
-        column![r, b].into()
+        column![r, b].align_x(Horizontal::Center).into()
     }
 
     pub fn update(&mut self, message: Message) -> Task<Message> {

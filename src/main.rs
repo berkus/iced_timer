@@ -7,7 +7,7 @@
 use iced::{
     color,
     widget::{column, container, Container},
-    Element, Subscription, Task,
+    Element, Length, Subscription, Task,
 };
 
 #[cfg(debug_assertions)]
@@ -82,6 +82,7 @@ impl IcedTimer {
         } else {
             content
         })
+        .center(Length::Fill)
         .into()
     }
 }

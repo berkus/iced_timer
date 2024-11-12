@@ -1,4 +1,5 @@
 use iced::{
+    alignment::Horizontal,
     widget::{button, column, container, row, text, text_input},
     Element, Task,
 };
@@ -60,6 +61,7 @@ impl InputView {
             }),
             button("-").on_press(Message::NewValue(self.clamp(self.value.saturating_sub(1))))
         ]
+        .align_x(Horizontal::Center)
         .into()
     }
 

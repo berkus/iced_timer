@@ -3,7 +3,8 @@
 use {
     crate::input_view::{InputView, Message as InputViewMessage},
     iced::{
-        widget::{button, column, container, row, text, text_input},
+        alignment::{Horizontal, Vertical},
+        widget::{button, column, container, horizontal_space, row, text, text_input},
         Element, Task,
     },
 };
@@ -41,11 +42,16 @@ impl InitPanel {
     }
 
     pub fn view(&self) -> Element<Message> {
-        row![
+        container(row![
+            horizontal_space(),
             self.hours.view().map(Message::HoursChanged),
+            text(":"),
             self.minutes.view().map(Message::MinutesChanged),
+            text(":"),
             self.seconds.view().map(Message::SecondsChanged),
-        ]
+            horizontal_space(),
+        ])
+        .align_x(Horizontal::Center)
         .into()
     }
 
